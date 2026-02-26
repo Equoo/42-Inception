@@ -8,18 +8,13 @@ RUN apk update && \
 
 RUN chown -R wordpress:wordpress /var/www /var/log/php84/
 
-WORKDIR /var/www
-
-VOLUME /var/www
-
 COPY tools/docker-entrypoint.sh /usr/local/bin/
 COPY tools/healthcheck.sh /usr/local/bin/
 
 USER wordpress
 COPY conf/www.conf /etc/php84/php-fpm.d/www.conf
 
-# RUN ls -ld /bin/sh && file /usr/local/bin/docker-entrypoint.sh && 1
-
+WORKDIR /var/www
 EXPOSE 9000
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 # CMD ["php-fpm84", "-F"]

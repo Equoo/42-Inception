@@ -8,18 +8,20 @@ RUN apk update && \
 
 RUN chown -R nginx:nginx /var/lib/nginx /var/log/nginx /run/nginx
 
-VOLUME /var/lib/nginx/html
-# VOLUME /var/log/nginx
-
-COPY tools/docker-entrypoint.sh /usr/local/bin/
 COPY tools/healthcheck.sh /usr/local/bin/
-COPY conf/* /etc/nginx/
+COPY conf/nginx.conf /etc/nginx/
+COPY conf/http.d/default.conf /etc/nginx/http.d/
+
+RUN ln -s /run/secrets/nginx_key /etc/nginx/key.pem
+RUN ln -s /run/secrets/nginx_cert /etc/nginx/cert.pem
+
 RUN chown -R nginx:nginx /etc/nginx
 
 USER nginx
 
 EXPOSE 443
-EXPOSE 80
 
-# ENTRYPOINT [ "docker-entrypoint.sh" ]
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /var/lib/nginx/html
+
+CMD ["tail", "-f"]
+# CMD ["nginx", "-g", "daemon off;"]
