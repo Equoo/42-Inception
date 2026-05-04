@@ -17,4 +17,3 @@ COPY conf/www.conf /etc/php84/php-fpm.d/www.conf
 WORKDIR /var/www
 EXPOSE 9000
 ENTRYPOINT [ "docker-entrypoint.sh" ]
-# CMD ["php-fpm84", "-F"]

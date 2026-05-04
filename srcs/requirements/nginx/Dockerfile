@@ -23,5 +23,4 @@ EXPOSE 443
 
 WORKDIR /var/lib/nginx/html
 
-CMD ["tail", "-f"]
-# CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]

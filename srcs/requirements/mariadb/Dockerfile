@@ -9,9 +9,6 @@ RUN apk update && \
 RUN mkdir -p /var/lib/mysql /run/mysqld && \
     chown -R mysql:mysql /var/lib/mysql /run/mysqld
 
-
-# RUN --mount=type=secret,id=nginx_cert,target=/etc/nginx/cert.pem
-
 RUN mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 
 COPY tools/healthcheck.sh /usr/local/bin/

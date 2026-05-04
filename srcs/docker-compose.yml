@@ -5,6 +5,8 @@ services:
       - mariadb:/var/lib/mysql
     networks:
       - docker-network
+    secrets:
+      - mysql_password
 
   nginx:
     build: requirements/nginx
@@ -26,6 +28,8 @@ services:
       - wordpress:/var/www
     networks:
       - docker-network
+    secrets:
+      - mysql_password
     depends_on:
       - mariadb
 
@@ -38,6 +42,8 @@ volumes:
   mariadb:
 
 secrets:
+  mysql_password:
+    file: ../secrets/mysql_password
   nginx_cert:
     file: ../secrets/cert.pem
   nginx_key:
