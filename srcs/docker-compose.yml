@@ -9,7 +9,7 @@ services:
   nginx:
     build: requirements/nginx
     ports:
-      - "443:443"
+      - "4444:443"
     volumes:
       - wordpress:/var/lib/nginx/html
     networks:
@@ -39,6 +39,6 @@ volumes:
 
 secrets:
   nginx_cert:
-    file: secrets/cert.pem
+    file: ../secrets/cert.pem
   nginx_key:
-    file: secrets/key.pem
+    file: ../secrets/key.pem

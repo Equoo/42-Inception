@@ -4,7 +4,7 @@ RUN addgroup -S nginx && \
 	adduser -S nginx -G nginx -h /var/lib/nginx
 
 RUN apk update && \
-	apk add --no-cache nginx
+	apk add --no-cache nginx bash
 
 RUN chown -R nginx:nginx /var/lib/nginx /var/log/nginx /run/nginx
 
