@@ -1,26 +1,29 @@
 #!/bin/sh
+set -e
 
-echo "/var/lib/mysql/$MYSQL_DB"
+if [ ! -d "/var/lib/mysql/$MYSQL_DB" ]; then
+    echo "First run — initializing..."
 
-if [ -d "/var/lib/mysql/$MYSQL_DB" ]; then
-	echo "Setup already done."
+    mariadbd --user=mysql --skip-networking &
+    until mariadbd-admin ping --socket=/run/mysqld/mysqld.sock --silent 2>/dev/null; do
+        sleep 1
+    done
+
+	echo "Step twp"
+
+    mariadb --socket=/run/mysqld/mysqld.sock -uroot << EOF
+CREATE DATABASE IF NOT EXISTS \`${MYSQL_DB}\`;
+CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON \`${MYSQL_DB}\`.* TO '${MYSQL_USER}'@'%';
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+FLUSH PRIVILEGES;
+EOF
+
+    mariadbd-admin --socket=/run/mysqld/mysqld.sock -uroot shutdown
+    wait
+    echo "Init done."
 else
-	mariadbd --user=mysql --console &
-
-	mysql_secure_installation << _EOF_
-
-y
-none
-none
-y
-n
-y
-y
-_EOF_
-
-# echo "GRANT ALL ON *.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$(cat /run/secrets/mysql_password)'; FLUSH PRIVILEGES;" | mariadb -uroot
-
-	mariadb stop
+    echo "Already initialized."
 fi
 
-mariadbd --user=mysql --console
+exec mariadbd --user=mysql --bind-address=0.0.0.0 --port=3306

@@ -7,6 +7,7 @@ services:
       - docker-network
     secrets:
       - mysql_password
+    env_file: ".env"
 
   nginx:
     build: requirements/nginx
@@ -21,6 +22,7 @@ services:
       - nginx_key
     depends_on:
       - wordpress
+    env_file: ".env"
 
   wordpress:
     build: requirements/wordpress
@@ -32,6 +34,7 @@ services:
       - mysql_password
     depends_on:
       - mariadb
+    env_file: ".env"
 
 networks:
   docker-network:
