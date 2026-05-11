@@ -12,10 +12,6 @@ RUN mkdir -p /var/lib/mysql /run/mysqld && \
 RUN mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 
 COPY tools/healthcheck.sh /usr/local/bin/
+COPY tools/docker-entrypoint.sh /usr/local/bin/
 
-USER mysql
-COPY conf/server.cnf /etc/my.cnf.d/mariadb-server.cnf
-# ENTRYPOINT [ "docker-entrypoint.sh" ]
-
-EXPOSE 3306
-CMD ["mariadbd", "--user=mysql", "--console"]
+ENTRYPOINT [ "docker-entrypoint.sh" ]

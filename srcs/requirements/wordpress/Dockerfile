@@ -4,9 +4,13 @@ RUN addgroup -S wordpress && \
 	adduser -S wordpress -G wordpress -h /var/www
 
 RUN apk update && \
-	apk add --no-cache php84 fcgi php84-cgi php84-fpm php84-mysqli
+	apk add --no-cache curl php84 fcgi php84-cgi php84-fpm php84-mysqli php84-pdo php84-gd php84-cli php84-mbstring
 
 RUN chown -R wordpress:wordpress /var/www /var/log/php84/
+
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+  && chmod +x wp-cli.phar \
+  && mv wp-cli.phar /usr/local/bin/wp
 
 COPY tools/docker-entrypoint.sh /usr/local/bin/
 COPY tools/healthcheck.sh /usr/local/bin/
@@ -14,6 +18,7 @@ COPY tools/healthcheck.sh /usr/local/bin/
 USER wordpress
 COPY conf/www.conf /etc/php84/php-fpm.d/www.conf
 
-WORKDIR /var/www
-EXPOSE 9000
+RUN mkdir -p /var/www/html
+
+WORKDIR /var/www/html
 ENTRYPOINT [ "docker-entrypoint.sh" ]

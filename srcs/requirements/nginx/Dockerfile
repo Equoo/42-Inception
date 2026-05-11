@@ -19,8 +19,6 @@ RUN chown -R nginx:nginx /etc/nginx
 
 USER nginx
 
-EXPOSE 443
-
 WORKDIR /var/lib/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]
