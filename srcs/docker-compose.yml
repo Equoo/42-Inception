@@ -31,7 +31,8 @@ services:
       - nginx_cert
       - nginx_key
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_healthy
     env_file: ".env"
     restart: unless-stopped
     healthcheck:
@@ -50,7 +51,8 @@ services:
     secrets:
       - mysql_password
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     env_file: ".env"
     restart: unless-stopped
     healthcheck:

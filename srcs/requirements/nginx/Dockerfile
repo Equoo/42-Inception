@@ -1,4 +1,4 @@
-FROM alpine:3.23.3
+FROM alpine:3.22
 
 RUN addgroup -S nginx && \
 	adduser -S nginx -G nginx -h /var/lib/nginx
@@ -18,6 +18,6 @@ RUN chown -R nginx:nginx /etc/nginx
 
 USER nginx
 
-WORKDIR /var/lib/nginx/html
+WORKDIR /var/www/html
 
 CMD ["nginx", "-g", "daemon off;"]

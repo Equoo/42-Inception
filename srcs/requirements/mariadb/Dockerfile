@@ -1,4 +1,4 @@
-FROM alpine:3.23.3
+FROM alpine:3.22
 
 RUN addgroup -S mysql && \
 	adduser -S mysql -G mysql -h /var/lib/mysql
@@ -14,8 +14,6 @@ COPY tools/healthcheck.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/healthcheck.sh
 COPY tools/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-EXPOSE 3306
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 CMD ["mariadbd", "--user=mysql"]
