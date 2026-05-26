@@ -14,9 +14,6 @@ download() {
 	wget https://wordpress.org/wordpress-latest.tar.gz &> /dev/null
 	tar -xzvf wordpress-latest.tar.gz &> /dev/null
 	rm wordpress-latest.tar.gz &> /dev/null
-
-	mv wordpress/* .
-	rm -Rf wordpress/
 }
 
 configure() {
@@ -30,6 +27,7 @@ configure() {
 main() {
     if is_fresh_install; then
 		download
+		cd wordpress
         configure
         log "Initialisation complete."
     else

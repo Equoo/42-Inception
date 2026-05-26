@@ -6,7 +6,7 @@ services:
     volumes:
       - mariadb:/var/lib/mysql
     networks:
-      - docker-network
+      - database
     secrets:
       - mysql_password
       - mysql_root_password
@@ -26,7 +26,7 @@ services:
     volumes:
       - wordpress:/var/www/html
     networks:
-      - docker-network
+      - wordpress
     secrets:
       - nginx_cert
       - nginx_key
@@ -45,9 +45,10 @@ services:
   wordpress:
     build: requirements/wordpress
     volumes:
-      - wordpress:/var/www/html
+      - wordpress:/var/www/html/wordpress
     networks:
-      - docker-network
+      - wordpress
+      - database
     secrets:
       - mysql_password
     depends_on:
@@ -62,7 +63,34 @@ services:
       retries: 3
       start_period: 30s
 
+  ftp:
+    build: requirements/ftp
+    ports:
+      - "2021:21"
+      - "10000-10100:10000-10100"
+    volumes:
+      - wordpress:/srv
+    networks:
+      - ftp
+    secrets:
+      - ftp_password
+    env_file: ".env"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+
 networks:
+  database:
+    driver: bridge
+  wordpress:
+    driver: bridge
+  ftp:
+    driver: bridge
+
   docker-network:
     driver: bridge
 
@@ -81,6 +109,8 @@ volumes:
       device: /home/dderny/data/mariadb
 
 secrets:
+  ftp_password:
+    file: ../secrets/ftp_password
   mysql_password:
     file: ../secrets/mysql_password
   mysql_root_password:
