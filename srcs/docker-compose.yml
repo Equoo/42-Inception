@@ -49,9 +49,12 @@ services:
     networks:
       - wordpress
       - database
+      - redis
     secrets:
       - mysql_password
     depends_on:
+      redis:
+        condition: service_healthy
       mariadb:
         condition: service_healthy
     env_file: ".env"
@@ -83,12 +86,27 @@ services:
       retries: 3
       start_period: 30s
 
+  redis:
+    build: requirements/redis
+    networks:
+      - redis
+    env_file: ".env"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+
 networks:
   database:
     driver: bridge
   wordpress:
     driver: bridge
   ftp:
+    driver: bridge
+  redis:
     driver: bridge
 
   docker-network:

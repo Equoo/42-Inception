@@ -3,7 +3,7 @@ FROM alpine:3.22
 RUN addgroup -S wordpress && \
 	adduser -S wordpress -G wordpress -h /var/www/html/
 
-RUN apk add --no-cache curl php84 fcgi php84-cgi php84-fpm php84-mysqli php84-pdo php84-gd php84-cli php84-mbstring
+RUN apk add --no-cache curl php84 fcgi php84-redis php84-cgi php84-fpm php84-mysqli php84-pdo php84-gd php84-cli php84-mbstring
 
 RUN mkdir -p /var/www/html/
 RUN chown -R wordpress:wordpress /var/www/html/ /var/log/php84/

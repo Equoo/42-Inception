@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+echo 127.0.0.1 $DOMAIN_NAME >> /etc/hosts
+
 curl \
     --fail \
     --connect-timeout 3 \
@@ -8,6 +10,6 @@ curl \
     --insecure \
     --silent \
     --show-error \
-    "https://localhost:443/" > /dev/null 2>&1
+    "https://$DOMAIN_NAME:443/" > /dev/null 2>&1
 
 exit $?
