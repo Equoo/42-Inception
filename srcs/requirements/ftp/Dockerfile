@@ -1,4 +1,4 @@
-FROM alpine:3.22
+FROM alpine:3.23
 
 RUN addgroup -S proftpd && \
 	adduser  -s /bin/sh -S proftpd -G proftpd -h /home/proftpd

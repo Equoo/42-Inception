@@ -29,7 +29,11 @@ configure() {
     'port'     => 6379,
     'auth'     => '', // ['user', 'password'] if you use Redis ACL
     'database' => 0, // Optionally use a specific numeric Redis database. Default is 0.
-);" >> ./wordpress/wp-config.php
+);
+
+define( 'WP_SITEURL', 'https://$DOMAIN_NAME' );
+define( 'WP_HOME', 'https://$DOMAIN_NAME' );
+" >> ./wordpress/wp-config.php
 
 }
 
@@ -49,3 +53,4 @@ main() {
 }
 
 main "$@"
+

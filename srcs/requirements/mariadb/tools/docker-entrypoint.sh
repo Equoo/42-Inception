@@ -87,29 +87,6 @@ EOSQL
     fi
 }
 
-run_init_scripts() {
-    local dir="/docker-entrypoint-initdb.d"
-    [ -d "$dir" ] || return 0
-
-    for f in "$dir"/*.sql "$dir"/*.sh; do
-        [ -f "$f" ] || continue
-        case "$f" in
-            *.sql)
-                log "Executing SQL: $f"
-                mariadb --socket=/run/mysqld/mysqld.sock \
-                      --user=root \
-                      --password="$(cat /run/secrets/mysql_root_password)" \
-                      ${MYSQL_DB:+--database="$MYSQL_DB"} \
-                      < "$f"
-                ;;
-            *.sh)
-                log "Executing shell script: $f"
-                sh "$f"
-                ;;
-        esac
-    done
-}
-
 main() {
     if is_fresh_install; then
         init_database

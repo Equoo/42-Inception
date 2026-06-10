@@ -10,6 +10,6 @@ curl \
     --insecure \
     --silent \
     --show-error \
-    "https://$DOMAIN_NAME:443/" > /dev/null 2>&1
+    "https://$DOMAIN_NAME/" > /dev/null 2>&1
 
 exit $?
