@@ -24,7 +24,7 @@ RUN ln -s /run/secrets/nginx_cert /etc/nginx/cert.pem
 RUN chown -R nginx:nginx /etc/nginx
 
 USER nginx
-WORKDIR /var/www/html
+WORKDIR /var/www/
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 CMD ["nginx", "-g", "daemon off;"]

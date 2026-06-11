@@ -7,7 +7,7 @@ RUN apk add --no-cache redis
 
 RUN mkdir -p /etc/redis/ /var/log/redis
 COPY conf/redis.conf /etc/redis/redis.conf
-RUN chown -R redis:redis /etc/redis/ /var/log/redis
+RUN chown -R redis:redis /etc/redis/ /var/log/redis;
 
 COPY tools/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
@@ -17,4 +17,4 @@ RUN chmod +x /usr/local/bin/healthcheck.sh
 USER redis
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
-CMD ["redis-server", "--bind", "0.0.0.0"]
+CMD ["redis-server", "/etc/redis/redis.conf", "--bind", "0.0.0.0"]

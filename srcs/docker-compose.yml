@@ -24,7 +24,7 @@ services:
     ports:
       - "4444:443"
     volumes:
-      - wordpress:/var/www/html
+      - wordpress:/var/www/wordpress/
     networks:
       - nginx
     secrets:
@@ -45,7 +45,7 @@ services:
   wordpress:
     build: requirements/wordpress
     volumes:
-      - wordpress:/var/www/html/wordpress
+      - wordpress:/var/www/wordpress/
     networks:
       - nginx
       - database
@@ -104,8 +104,14 @@ services:
     networks:
       - redis
       - nginx
+      - database
     volumes:
       - grafana:/usr/share/grafana
+    depends_on:
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     env_file: ".env"
     restart: unless-stopped
     healthcheck:

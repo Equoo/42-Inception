@@ -65,7 +65,6 @@ configure_server() {
         FLUSH PRIVILEGES;
 EOSQL
 
-    # Optional: create a database + user
     if [ -n "$MYSQL_DB" ]; then
         log "Creating database '$MYSQL_DB'..."
         mariadb --socket=/run/mysqld/mysqld.sock \
@@ -85,6 +84,14 @@ EOSQL
 		GRANT ALL PRIVILEGES ON \`$MYSQL_DB\`.* TO '$MYSQL_USER'@'%';
                   FLUSH PRIVILEGES;"
     fi
+	
+	mariadb --socket=/run/mysqld/mysqld.sock \
+              --user=root \
+              --password="$(cat /run/secrets/mysql_root_password)" \
+			  -e "CREATE DATABASE grafana_db;
+	CREATE USER 'grafana_user'@'%' IDENTIFIED BY 'grafana';
+	GRANT ALL PRIVILEGES ON grafana_db.* TO 'grafana_user'@'%';
+	FLUSH PRIVILEGES;"
 }
 
 main() {
