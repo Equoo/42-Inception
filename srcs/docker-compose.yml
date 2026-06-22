@@ -1,8 +1,6 @@
 services:
   mariadb:
-    build: requirements/mariadb
-    ports:
-      - "3307:3306"
+    build: mandatory/mariadb
     volumes:
       - mariadb:/var/lib/mysql
     networks:
@@ -20,7 +18,7 @@ services:
       start_period: 30s
 
   nginx:
-    build: requirements/nginx
+    build: mandatory/nginx
     ports:
       - "4444:443"
     volumes:
@@ -33,6 +31,8 @@ services:
     depends_on:
       wordpress:
         condition: service_healthy
+      adminer:
+        condition: service_healthy
     env_file: ".env"
     restart: unless-stopped
     healthcheck:
@@ -43,7 +43,7 @@ services:
       start_period: 30s
 
   wordpress:
-    build: requirements/wordpress
+    build: mandatory/wordpress
     volumes:
       - wordpress:/var/www/wordpress/
     networks:
@@ -52,6 +52,8 @@ services:
       - redis
     secrets:
       - mysql_password
+      - wp_admin_password
+      - wp_user_password
     depends_on:
       redis:
         condition: service_healthy
@@ -67,7 +69,7 @@ services:
       start_period: 30s
 
   ftp:
-    build: requirements/ftp
+    build: bonus/ftp
     ports:
       - "2021:21"
       - "10000-10100:10000-10100"
@@ -87,7 +89,7 @@ services:
       start_period: 30s
 
   redis:
-    build: requirements/redis
+    build: bonus/redis
     networks:
       - redis
     env_file: ".env"
@@ -100,18 +102,35 @@ services:
       start_period: 30s
 
   grafana:
-    build: requirements/grafana
+    build: bonus/grafana
     networks:
       - redis
       - nginx
       - database
     volumes:
       - grafana:/usr/share/grafana
+    secrets:
+      - mysql_password
+      - gf_password
     depends_on:
       redis:
         condition: service_healthy
       mariadb:
         condition: service_healthy
+    env_file: ".env"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+
+  adminer:
+    build: bonus/adminer
+    networks:
+      - nginx
+      - database
     env_file: ".env"
     restart: unless-stopped
     healthcheck:
@@ -152,8 +171,14 @@ volumes:
       device: /home/dderny/data/grafana
 
 secrets:
+  wp_admin_password:
+    file: ../secrets/wp_admin_password
+  wp_user_password:
+    file: ../secrets/wp_user_password
   ftp_password:
     file: ../secrets/ftp_password
+  gf_password:
+    file: ../secrets/gf_password
   mysql_password:
     file: ../secrets/mysql_password
   mysql_root_password:

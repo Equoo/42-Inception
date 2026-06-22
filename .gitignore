@@ -1,4 +1,5 @@
 
 .env
+!.env.exemple
 secrets/*
 !.gitkeep

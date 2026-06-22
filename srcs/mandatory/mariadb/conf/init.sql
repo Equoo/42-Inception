@@ -1,0 +1,18 @@
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
+DELETE FROM mysql.global_priv WHERE User='';
+DELETE FROM mysql.global_priv WHERE User='root'
+	AND Host NOT IN ('localhost','127.0.0.1','::1');
+
+DROP DATABASE IF EXISTS test;
+
+CREATE DATABASE IF NOT EXISTS `$MYSQL_DB` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON `$MYSQL_DB`.* TO '$MYSQL_USER'@'%';
+
+CREATE DATABASE grafana_db;
+CREATE USER 'grafana_user'@'%' IDENTIFIED BY 'grafana';
+GRANT ALL PRIVILEGES ON grafana_db.* TO 'grafana_user'@'%';
+
+FLUSH PRIVILEGES;
