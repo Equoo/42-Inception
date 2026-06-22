@@ -26,84 +26,40 @@ Indicate the main design choices, and include the following comparisons:
 
 ### Architecture & Sources
 
-.
-├── mandatory
-│   ├── mariadb
-│   │   ├── conf
-│   │   │   └── init.sql
-│   │   ├── tools
-│   │   │   ├── docker-entrypoint.sh
-│   │   │   └── healthcheck.sh
-│   │   └── Dockerfile
-│   ├── nginx
-│   │   ├── conf
-│   │   │   ├── http.d
-│   │   │   │   └── default.conf
-│   │   │   └── nginx.conf
-│   │   ├── static
-│   │   │   └── index.html
-│   │   ├── tools
-│   │   │   ├── docker-entrypoint.sh
-│   │   │   └── healthcheck.sh
-│   │   └── Dockerfile
-│   └── wordpress
-│       ├── conf
-│       │   ├── memorylimit.ini
-│       │   └── www.conf
-│       ├── tools
-│       │   ├── docker-entrypoint.sh
-│       │   └── healthcheck.sh
-│       └── Dockerfile
-├── bonus
-│   ├── adminer
-│   │   ├── conf
-│   │   │   └── www.conf
-│   │   ├── tools
-│   │   │   └── healthcheck.sh
-│   │   └── Dockerfile
-│   ├── ftp
-│   │   ├── conf
-│   │   │   ├── ftpd.group
-│   │   │   ├── ftpd.passwd
-│   │   │   └── proftpd.conf
-│   │   ├── tools
-│   │   │   ├── docker-entrypoint.sh
-│   │   │   └── healthcheck.sh
-│   │   └── Dockerfile
-│   ├── grafana
-│   │   ├── conf
-│   │   │   └── custom.ini
-│   │   ├── dashboards
-│   │   │   ├── redis.json
-│   │   │   └── wordpress.json
-│   │   ├── provisioning
-│   │   │   ├── dashboard.yml
-│   │   │   └── datasource.yml
-│   │   ├── tools
-│   │   │   ├── docker-entrypoint.sh
-│   │   │   └── healthcheck.sh
-│   │   └── Dockerfile
-│   └── redis
-│       ├── conf
-│       │   └── redis.conf
-│       ├── tools
-│       │   ├── docker-entrypoint.sh
-│       │   └── healthcheck.sh
-│       └── Dockerfile
+.<br>
+├── mandatory<br>
+│   ├── format_exemple<br>
+│   │   ├── conf<br>
+│   │   │   └── configuration_file.conf<br>
+│   │   ├── tools<br>
+│   │   │   ├── docker-entrypoint.sh<br>
+│   │   │   └── healthcheck.sh<br>
+│   │   └── Dockerfile<br>
+│   ├── mariadb<br>
+│   ├── nginx<br>
+│   └── wordpress<br>
+├── bonus<br>
+│   ├── adminer<br>
+│   ├── ftp<br>
+│   ├── grafana<br>
+│   └── redis<br>
 └── docker-compose.yml
-
 
 ### Design Choices
 
+Many networks
 <!-- Main technical/architectural decisions made for this project. -->
 
 ### Virtual Machines vs Docker
 
-<!-- Comparison -->
+
 
 ### Secrets vs Environment Variables
 
-<!-- Comparison -->
+Environment variables and Secrets on docker are methods usually used to configure a container.<br>
+Env vars is the basic way, they are simple to use: They can be define them at runtime, in a .env file or in docker configs. Vars can be already defined by the OS environment. Per consequent, most vars can be read by every process.<br>
+Secrets is a Docker way to let passthrough sensible data into containers. For security reasons, data like password, certificates or api keys can't be readable per everyone. So we use secrets, because a secret is a file that can only be read by containers that have explicit access to a secret in containers definitions. It prevent leaks of sensible data into logs, images historic or code source repo where there usually risk with a .env file.
+
 
 ### Docker Network vs Host Network
 
@@ -119,7 +75,34 @@ Indicate the main design choices, and include the following comparisons:
 
 ### Prerequisites
 
+Theses are the prerequisites:
+- Docker
+- *Optionnal* Makefile
+- *Optionnal* Openssl
+
 ### Installation
+
+1. Configure services by copying .env.template into .env then edit it.
+```bash
+cp .env.template .env
+```
+2. Setup credentials: add and completes theses files in `./secrets/`:
+- mysql_password
+- mysql_root_password
+- wp_admin_password
+- wp_user_password
+- gf_password
+- ftp_password
+3. Setup nginx certificate:
+- For Development generate one by using `./cert_gen.sh`
+- For Production use a correct certificate.
+
+For images building:
+```bash
+make build
+# or
+docker compose --project-directory srcs/ build
+```
 
 ### Usage
 
@@ -139,3 +122,4 @@ Indicate the main design choices, and include the following comparisons:
 ### AI Usage
 
 <!-- Describe how AI was used: for which tasks and which parts of the project. -->
+
