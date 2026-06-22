@@ -26,24 +26,27 @@ Indicate the main design choices, and include the following comparisons:
 
 ### Architecture & Sources
 
-.<br>
-├── mandatory<br>
-│   ├── format_exemple<br>
-│   │   ├── conf<br>
-│   │   │   └── configuration_file.conf<br>
-│   │   ├── tools<br>
-│   │   │   ├── docker-entrypoint.sh<br>
-│   │   │   └── healthcheck.sh<br>
-│   │   └── Dockerfile<br>
-│   ├── mariadb<br>
-│   ├── nginx<br>
-│   └── wordpress<br>
-├── bonus<br>
-│   ├── adminer<br>
-│   ├── ftp<br>
-│   ├── grafana<br>
-│   └── redis<br>
+Sources structure
+```
+.
+├── mandatory
+│   ├── service_exemple
+│   │   ├── conf
+│   │   │   └── configuration_file.conf
+│   │   ├── tools
+│   │   │   ├── docker-entrypoint.sh
+│   │   │   └── healthcheck.sh
+│   │   └── Dockerfile
+│   ├── mariadb
+│   ├── nginx
+│   └── wordpress
+├── bonus
+│   ├── adminer
+│   ├── ftp
+│   ├── grafana
+│   └── redis
 └── docker-compose.yml
+```
 
 ### Design Choices
 
@@ -52,7 +55,11 @@ Many networks
 
 ### Virtual Machines vs Docker
 
+Virtual machines is great for achieving full physical isolation of services and emulation of CPU architecture. It's secure, privilege escalation is nearby impossible. But VM usage has high storage usage and high performance cost. Setup a VM is heavy and long. Each will have dedicated CPU core and ram space, if we used VM for this project, efficient usage of cores when virtualizing each services is impossible.
 
+Docker is a containers manager. Containers is userspace level isolation of linux distribution files and network. Containers process share and run on host kernel. They offer faster installation, better reproducibility, less performance cost and less storage usage. But isolation is weak because they are managed by a same kernel. Privilege escalation breach is hard but not rare. Containers cannot install driver dependencies because of limited permission on host. Portability has a limit, services must use same kernel base: containers based on windows kernel cannot run on an unix based OS without virtualization.
+
+In our case, we have many services that we want to isolate from host and each others. They are trusted services and didn't need different kernel or drivers. So the better choice is Docker.
 
 ### Secrets vs Environment Variables
 
@@ -63,15 +70,16 @@ Secrets is a Docker way to let passthrough sensible data into containers. For se
 
 ### Docker Network vs Host Network
 
-<!-- Comparison -->
+The only difference is the isolation. Host network there isn't isolation of network. With docker networks, a new network space is created. Ports already opened on host can be opened. Ports are inaccessible from host or other networks. To share ports we can bind them to the host.
+Usage of docker network offer a better security.
 
 ### Docker Volumes vs Bind Mounts
 
-<!-- Comparison -->
+A bind mount share host files with a container.
+Docker volumes is bind mount managed by docker. Host data location is managed by docker.
+A docker container is temporary, so to keep data between two launch of a container we add shared location to the container. But usage of a simple bind mount isn't portable. So usage of docker volumes is greater, because data will be managed the same way on different machine.
 
 ## Instructions
-
-<!-- Compilation, installation, and/or execution information. -->
 
 ### Prerequisites
 
@@ -82,27 +90,8 @@ Theses are the prerequisites:
 
 ### Installation
 
-1. Configure services by copying .env.template into .env then edit it.
-```bash
-cp .env.template .env
-```
-2. Setup credentials: add and completes theses files in `./secrets/`:
-- mysql_password
-- mysql_root_password
-- wp_admin_password
-- wp_user_password
-- gf_password
-- ftp_password
-3. Setup nginx certificate:
-- For Development generate one by using `./cert_gen.sh`
-- For Production use a correct certificate.
-
-For images building:
-```bash
-make build
-# or
-docker compose --project-directory srcs/ build
-```
+Install prerequisites packages and clone this repo.
+For setup see [DEV_DOC.md](./DEV_DOC.md).
 
 ### Usage
 
@@ -113,13 +102,16 @@ docker compose --project-directory srcs/ build
 
 ## Resources
 
-<!-- Classic references: documentation, articles, tutorials, etc. -->
-
--
--
--
+- [Docker Wikipedia](https://fr.wikipedia.org/wiki/Docker_(logiciel))
+- [Virtual Machine Wikipedia](https://fr.wikipedia.org/wiki/Machine_virtuelle)
+- [Wordpress Doc](https://wordpress.org/documentation/)
+- [Nginx Guide](https://nginx.org/en/docs/beginners_guide.html)
+- [Redis Guide](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/)
+- [Grafana Doc](https://grafana.com/docs/grafana/latest/?pg=oss-graf&plcmt=hero-btn-2)
+- [MariaDB Guide](https://mariadb.com/get-started-with-mariadb/)
+- 42 peer learning
 
 ### AI Usage
 
-<!-- Describe how AI was used: for which tasks and which parts of the project. -->
+AI was only used for documentation search and README template.
 

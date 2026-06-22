@@ -20,7 +20,7 @@ services:
   nginx:
     build: mandatory/nginx
     ports:
-      - "4444:443"
+      - "443:443"
     volumes:
       - wordpress:/var/www/wordpress/
     networks:
@@ -71,7 +71,7 @@ services:
   ftp:
     build: bonus/ftp
     ports:
-      - "2021:21"
+      - "21:21"
       - "10000-10100:10000-10100"
     volumes:
       - wordpress:/srv
@@ -184,6 +184,6 @@ secrets:
   mysql_root_password:
     file: ../secrets/mysql_root_password
   nginx_cert:
-    file: ../secrets/cert.pem
+    file: ../secrets/nginx.crt
   nginx_key:
-    file: ../secrets/key.pem
+    file: ../secrets/nginx.key

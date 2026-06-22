@@ -16,5 +16,6 @@ down:
 
 clean:
 	docker compose --project-directory srcs/ down -v --rmi all
-	docker run --rm -it -v ${HOME}:/root alpine sh -c "rm -Rf /root/data"
 
+fclean: clean
+	docker run --rm -it -v ${HOME}:/root alpine sh -c "rm -Rf /root/data"

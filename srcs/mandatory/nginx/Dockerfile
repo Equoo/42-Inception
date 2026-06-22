@@ -5,7 +5,7 @@ RUN addgroup -S nginx && \
 
 RUN apk add --no-cache nginx
 
-RUN chown -R nginx:nginx /var/lib/nginx /var/log/nginx /run/nginx
+RUN chown -R nginx:nginx /var/lib/nginx /var/log/nginx /run/nginx /etc/ssl/
 
 COPY tools/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
@@ -17,9 +17,6 @@ COPY conf/http.d/default.conf /etc/nginx/http.d/
 
 RUN mkdir -p /var/www/static
 COPY static/index.html /var/www/static/index.html
-
-RUN ln -s /run/secrets/nginx_key /etc/nginx/key.pem
-RUN ln -s /run/secrets/nginx_cert /etc/nginx/cert.pem
 
 RUN chown -R nginx:nginx /etc/nginx
 
