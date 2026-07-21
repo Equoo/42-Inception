@@ -25,6 +25,10 @@ download_plugins() {
 configure() {
     cd wordpress
 
+    set +e
+    OLD_URL=$($($WP config get WP_HOME | true) | sed -e "s/https:\/\///")
+    set -e
+
     $WP config create \
         --dbname="$MYSQL_DB" \
         --dbuser="$MYSQL_USER" \
@@ -35,6 +39,8 @@ configure() {
 
     $WP config set WP_SITEURL "https://$DOMAIN_NAME"
     $WP config set WP_HOME "https://$DOMAIN_NAME"
+
+    $WP search-replace "$OLD_URL" "$DOMAIN_NAME" --all-tables --precise
 
     $WP config set redis_server \
         "array('host' => 'redis', 'port' => 6379, 'database' => 0)" \
@@ -54,6 +60,9 @@ configure() {
             --role=author \
             --user_pass="$(cat /run/secrets/wp_user_password)"
     fi
+
+    wp cache flush
+    wp rewrite flush
 
     cd ..
 }
