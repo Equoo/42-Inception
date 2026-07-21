@@ -1,8 +1,8 @@
 
 up:
-	mkdir /home/dderny/data/wordpress -p
-	mkdir /home/dderny/data/mariadb -p
-	mkdir /home/dderny/data/grafana -p
+	mkdir $(HOME)/data/wordpress -p
+	mkdir $(HOME)/data/mariadb -p
+	mkdir $(HOME)/data/grafana -p
 	docker compose --project-directory srcs/ up -d --build
 
 build:

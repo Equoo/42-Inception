@@ -156,19 +156,19 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/dderny/data/wordpress
+      device: $HOME/data/wordpress
   mariadb:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/dderny/data/mariadb
+      device: $HOME/data/mariadb
   grafana:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/dderny/data/grafana
+      device: $HOME/data/grafana
 
 secrets:
   wp_admin_password:
