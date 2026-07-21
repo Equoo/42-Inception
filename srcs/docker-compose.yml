@@ -1,6 +1,6 @@
 services:
   mariadb:
-    build: mandatory/mariadb
+    build: requirements/mariadb
     volumes:
       - mariadb:/var/lib/mysql
     networks:
@@ -18,7 +18,7 @@ services:
       start_period: 30s
 
   nginx:
-    build: mandatory/nginx
+    build: requirements/nginx
     ports:
       - "443:443"
     volumes:
@@ -43,7 +43,7 @@ services:
       start_period: 30s
 
   wordpress:
-    build: mandatory/wordpress
+    build: requirements/wordpress
     volumes:
       - wordpress:/var/www/wordpress/
     networks:

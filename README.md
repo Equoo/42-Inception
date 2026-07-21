@@ -19,17 +19,13 @@ The project is a hands-on introduction to core sysadmin/DevOps concepts: contain
 
 ## Project Description
 
-<!--
-Explain the use of Docker and the sources included in the project.
-Indicate the main design choices, and include the following comparisons:
--->
-
 ### Architecture & Sources
 
 Sources structure
 ```
+srcs
 .
-├── mandatory
+├── requirements
 │   ├── service_exemple
 │   │   ├── conf
 │   │   │   └── configuration_file.conf
@@ -50,8 +46,7 @@ Sources structure
 
 ### Design Choices
 
-Many networks
-<!-- Main technical/architectural decisions made for this project. -->
+Main architectural choice was to use networks as many services there are.
 
 ### Virtual Machines vs Docker
 
