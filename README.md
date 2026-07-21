@@ -113,5 +113,5 @@ For setup see [DEV_DOC.md](./DEV_DOC.md).
 
 ### AI Usage
 
-AI was only used for documentation search and README template.
+AI was only used for documentation, search and README template.
 

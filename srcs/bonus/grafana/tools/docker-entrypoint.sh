@@ -13,7 +13,8 @@ setup_homedir() {
 
 	grafana-cli plugins install redis-datasource
 
-	cp -r /var/lib/grafana/plugins/redis-datasource /usr/share/grafana/data/plugins/
+	mkdir -p /usr/share/grafana/data/plugins/ 
+	cp -r /var/lib/grafana/plugins/redis-datasource /usr/share/grafana/data/plugins/redis-datasource
 }
 
 main() {
