@@ -27,7 +27,6 @@ configure() {
 
     set +e
     OLD_URL=$($($WP config get WP_HOME | true) | sed -e "s/https:\/\///")
-    set -e
 
     $WP config create \
         --dbname="$MYSQL_DB" \
@@ -63,6 +62,7 @@ configure() {
 
     wp cache flush
     wp rewrite flush
+    set -e
 
     cd ..
 }
